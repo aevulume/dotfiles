@@ -1,0 +1,14 @@
+[user]
+    name = aevulume
+    email = yuri.monakhov@icloud.com
+
+[includeIf "gitdir:~/Projects/job/"]
+    path = ~/.config/git/job.conf
+
+[core]
+	excludesfile = ~/.gitignore
+	hooksPath = ~/.config/git/hooks
+
+[hooks]
+  workProjectsDirs = ~/Projects/job
+

@@ -1,0 +1,163 @@
+# common env
+ZSH_CONFIG_DIR="$HOME/.config/zsh"
+
+# no sessions
+unset zsh_session_options
+
+# autocomplete
+[[ -d "$HOME/.cache/zsh" ]] || mkdir -p "$HOME/.cache/zsh"
+export ZSH_COMPDUMP="$HOME/.cache/zsh/compdump"
+
+# history setup
+HISTFILE="$HOME/.cache/zsh/history"
+HISTSIZE=999
+SAVEHIST=1000
+setopt share_history
+setopt hist_verify
+setopt hist_ignore_dups
+setopt hist_expire_dups_first
+bindkey '^[[A' history-search-backward
+bindkey '^[[B' history-search-forward
+
+# lang env
+export LANG=en_US.UTF-8
+
+# vim env
+export VIMINFO="$HOME/.cache/vim/info"
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR="vim"
+else
+  export EDITOR="vim"
+fi
+
+# golang env
+export GOPATH="$HOME/.go"
+export GOBIN="$GOPATH/bin"
+go env -w GOSUMDB="off"
+go env -w GOPRIVATE="gitlab.fbs-d.com"
+go env -w GOPROXY="https://proxy.golang.org,direct"
+
+# setup oh-my-zsh
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="lambda-minimal"
+
+plugins=(
+  chezmoi
+  encode64
+  eza
+  fancy-ctrl-z
+  fzf
+  git
+  golang
+  history
+  ssh
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+)
+
+# eza
+zstyle ':omz:plugins:eza' 'dirs-first' yes
+zstyle ':omz:plugins:eza' 'git-status' yes
+zstyle ':omz:plugins:eza' 'header' yes
+zstyle ':omz:plugins:eza' 'icons' yes
+
+alias gomv='go mod vendor' # for plugin `golang`
+
+# start oh-my-zsh
+source $ZSH/oh-my-zsh.sh
+
+# aliases
+alias vi='vim'
+alias go='richgo'
+alias cat='bat --style=plain'
+alias lst='eza -laTL=2'
+alias less='less -X'
+alias wget='wget --no-hsts'
+alias zcfg='vi ~/.zshrc && source ~/.zshrc'
+
+alias gp='python3 -c "
+  import random;
+  import string;
+  d=random.choices(string.digits,k=3);
+  l=random.choices(string.ascii_lowercase,k=4);
+  u=random.choices(string.ascii_uppercase,k=4);
+  s=random.choices(\"!@#$%^&*()_+-=[]{}|;:,.<>?\",k=3);
+  chars=d+l+u+s;random.shuffle(chars);
+  print(\"\".join(chars),end=\"\")" | pbcopy'
+
+alias pgt-account-payments='docker run -it --rm -v ~/.pgpass:/root/.pgpass postgres \
+  psql -h stage-postgresql-account-payments.service.xfx.mx \
+    -p 7654 -U account-payments -d account-payments'
+
+alias pgt-bank-account-verification='docker run -it --rm -v ~/.pgpass:/root/.pgpass postgres \
+  psql -h stage-postgresql-bank-account-verification.service.xfx.mx \
+    -p 7654 -U bank-account-verification -d bank-account-verification'
+
+alias pgt-billing-rbac='docker run -it --rm -v ~/.pgpass:/root/.pgpass postgres \
+  psql -h stage-postgresql-billing-rbac.service.xfx.mx \
+    -p 7654 -U billing-rbac -d billing-rbac'
+
+alias pgt-currency='docker run -it --rm -v ~/.pgpass:/root/.pgpass postgres \
+  psql -h stage-postgresql-currency.service.xfx.mx \
+    -p 7654 -U currency -d currency'
+
+alias pgt-forms='docker run -it --rm -v ~/.pgpass:/root/.pgpass postgres \
+  psql -h stage-postgresql-forms.service.xfx.mx \
+    -p 7654 -U forms -d forms'
+
+alias pgt-payments-processor='docker run -it --rm -v ~/.pgpass:/root/.pgpass postgres \
+  psql -h stage-postgresql-payments-processor.service.xfx.mx \
+    -p 7654 -U payments-processor -d payments-processor'
+
+alias pgt-ps-api-gateway='docker run -it --rm -v ~/.pgpass:/root/.pgpass postgres \
+  psql -h stage-postgresql-ps-api-gateway.service.xfx.mx \
+    -p 7654 -U ps-api-gateway -d ps-api-gateway'
+
+alias pgt-ps-list='docker run -it --rm -v ~/.pgpass:/root/.pgpass postgres \
+  psql -h stage-postgresql-ps-list.service.xfx.mx \
+    -p 7654 -U ps-list -d ps-list'
+
+alias pgt-synchronizer-1c='docker run -it --rm -v ~/.pgpass:/root/.pgpass postgres \
+  psql -h stage-postgresql-synchronizer-1c.service.xfx.mx \
+    -p 7654 -U synchronizer-1c -d synchronizer-1c'
+
+alias pgt-transactions='docker run -it --rm -v ~/.pgpass:/root/.pgpass postgres \
+  psql -h stage-postgresql-transactions.service.xfx.mx \
+    -p 7654 -U transactions -d transactions'
+
+alias pgt-transactions-history='docker run -it --rm -v ~/.pgpass:/root/.pgpass postgres \
+  psql -h stage-postgresql-transactions-history.service.xfx.mx \
+    -p 7654 -U transactions-history -d transactions-history'
+
+alias pgt-vendors-api='docker run -it --rm -v ~/.pgpass:/root/.pgpass postgres \
+  psql -h stage-postgresql-vendors-api.service.xfx.mx \
+    -p 7654 -U vendors-api -d vendors-api'
+
+alias pgt-withdrawal-checkup='docker run -it --rm -v ~/.pgpass:/root/.pgpass postgres \
+  psql -h stage-postgresql-withdrawal-checkup.service.xfx.mx \
+    -p 7654 -U withdrawal-checkup -d withdrawal-checkup'
+
+# etcd-console aliases (credentials in ~/.etcdrc)
+alias etcd-stage='etcd-switch stage'
+alias etcd-prod='etcd-switch prod'
+
+# functions
+c() {
+  [[ -z "$1" ]] && echo "Usage: c <file>" && return 1
+  [[ ! -f "$1" ]] && echo "File not found: $1" && return 1
+  pbcopy < "$1"
+  echo "Copied: $1"
+}
+
+# path
+path=(
+  /usr/local/bin
+  /opt/homebrew/bin
+  /opt/homebrew/sbin
+  $GOBIN
+  $HOME/.local/bin
+  ${KREW_ROOT:-$HOME/.krew}/bin
+  $path
+)
+typeset -U path
+
