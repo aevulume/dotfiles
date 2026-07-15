@@ -13,7 +13,7 @@ config.webgpu_power_preference = 'HighPerformance'
 config.macos_window_background_blur = 10
 config.initial_cols = 200
 config.initial_rows = 55
-config.startup_mode = 'FullScreen'
+
 
 config.color_scheme = colors.theme_name
 config.inactive_pane_hsb = {

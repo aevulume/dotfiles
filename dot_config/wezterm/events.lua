@@ -88,11 +88,9 @@ end)
 wezterm.on('window-resized', apply_padding)
 
 wezterm.on('gui-startup', function(cmd)
-  local active = wezterm.gui.screens().active
   local _, _, window = mux.spawn_window(cmd or {})
   local gui = window:gui_window()
-  gui:set_position(active.x, active.y)
-  gui:set_inner_size(active.width, active.height)
+  gui:toggle_fullscreen()
   apply_padding(gui)
 end)
 
