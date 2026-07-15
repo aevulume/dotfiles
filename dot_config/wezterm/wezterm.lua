@@ -64,8 +64,8 @@ config.font = wezterm.font {
   family = 'Iosevka NF Light',
   style = 'Normal',
 }
-config.font_size = 17
-config.command_palette_font_size = 17
+config.font_size = 16
+config.command_palette_font_size = 16
 config.cell_width = 1
 config.line_height = 1
 
@@ -78,7 +78,7 @@ config.window_decorations =
 'RESIZE|MACOS_FORCE_DISABLE_SHADOW'
 config.window_frame = {
   font = wezterm.font { family = 'Iosevka NF Light' },
-  font_size = 17,
+  font_size = 16,
   active_titlebar_bg = 'none',
   inactive_titlebar_bg = 'none',
 }
