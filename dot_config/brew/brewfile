@@ -41,11 +41,9 @@ cask "postman", continue_on_failure: true
 cask "raycast", continue_on_failure: true
 cask "rectangle", continue_on_failure: true
 cask "slack", continue_on_failure: true
-cask "tailscale-app", continue_on_failure: true
 cask "telegram", continue_on_failure: true
 cask "transmission", continue_on_failure: true
 cask "wezterm@nightly", continue_on_failure: true
-cask "windows-app", continue_on_failure: true
 cask "zoom", continue_on_failure: true
 
 krew "oidc-login"
